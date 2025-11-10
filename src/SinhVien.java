@@ -1,3 +1,4 @@
+package src;
 /**
  * Lớp SinhVien: Dùng để lưu trữ thông tin của một sinh viên.
  * Đây là dữ liệu mà mỗi Node trong danh sách liên kết sẽ nắm giữ.
