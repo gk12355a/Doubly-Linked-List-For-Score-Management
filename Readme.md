@@ -1,89 +1,45 @@
-Dự án: Quản lý Điểm Sinh viên (Đề tài 18)
+# Dự án: Quản lý Điểm Sinh viên (Đề tài 18)
 
-Dự án này là một ứng dụng Java console, được xây dựng để thực hiện Đề tài 18: Ứng dụng danh sách liên kết kép vào quản lý điểm của sinh viên.
+## Giới thiệu
 
-Chương trình sử dụng cấu trúc dữ liệu Danh sách liên kết kép (Doubly Linked List) để quản lý một danh sách sinh viên. Mỗi sinh viên được quản lý thông tin cá nhân và điểm của 4 môn học cố định (Toán, Lý, Anh, CTDL), mỗi môn có số tín chỉ riêng.
+Dự án này là một ứng dụng **Java console**, được xây dựng để thực hiện **Đề tài 18: Ứng dụng danh sách liên kết kép vào quản lý điểm của sinh viên**.  
 
-Chương trình hỗ trợ đầy đủ các thao tác theo yêu cầu đề tài, đồng thời có khả năng tải (load) dữ liệu từ file diem_sinhvien_dt18.txt khi khởi động và lưu (save) lại dữ liệu khi kết thúc.
+Chương trình sử dụng cấu trúc dữ liệu **Danh sách liên kết kép (Doubly Linked List)** để quản lý danh sách sinh viên.  
+Mỗi sinh viên bao gồm thông tin cá nhân và điểm của 4 môn học cố định: **Toán, Lý, Anh, Cấu trúc dữ liệu & Giải thuật (CTDL)**.  
 
-Tính năng chính
+Chương trình có khả năng:
+- Tải dữ liệu sinh viên từ file `diem_sinhvien_dt18.txt` khi khởi động.  
+- Lưu lại toàn bộ danh sách vào file khi thoát chương trình.  
 
-Chương trình đáp ứng đầy đủ các yêu cầu của Đề tài 18:
+---
 
-* 18.1 (Nhập liệu): Nhập thêm sinh viên mới vào danh sách. Quá trình nhập dừng lại khi người dùng nhập dấu $ vào tên sinh viên.
+## Tính năng chính
 
-* 18.2 (Sắp xếp): Sắp xếp danh sách sinh viên theo chiều tăng dần của điểm Toán.
+Chương trình đáp ứng các yêu cầu của **Đề tài 18**:
 
-* 18.3 (Sắp xếp): Sắp xếp danh sách sinh viên theo chiều tăng dần của Điểm Trung Bình (ĐTB).
+1. **Nhập liệu (18.1):**  
+   Nhập thêm sinh viên mới vào danh sách. Quá trình nhập dừng khi người dùng nhập dấu `$` ở tên sinh viên.
 
-* 18.4 (Tìm kiếm): Tìm và hiển thị sinh viên có ĐTB cao nhất (Max) và thấp nhất (Min).
+2. **Sắp xếp theo điểm Toán (18.2):**  
+   Sắp xếp danh sách sinh viên tăng dần theo điểm môn Toán.
 
-* 18.5 (Lọc): Xuất danh sách các sinh viên đạt học lực A, B, C, D, hoặc F (dựa trên ĐTB).
+3. **Sắp xếp theo Điểm Trung Bình (18.3):**  
+   Sắp xếp danh sách sinh viên theo chiều tăng dần của điểm trung bình.
 
-* Lưu trữ: Tự động đọc file diem_sinhvien_dt18.txt khi mở và lưu lại toàn bộ danh sách hiện tại vào file khi thoát.
+4. **Tìm kiếm Max/Min (18.4):**  
+   Tìm và hiển thị sinh viên có ĐTB cao nhất và thấp nhất.
 
-Cấu trúc Dự án
+5. **Lọc học lực (18.5):**  
+   Xuất danh sách sinh viên đạt học lực A, B, C, D, hoặc F (theo ĐTB).
 
-Dự án bao gồm 7 tệp (6 file .java và 1 file .txt):
+6. **Lưu trữ dữ liệu:**  
+   Tự động đọc file `diem_sinhvien_dt18.txt` khi mở và lưu danh sách khi thoát.
 
-1. MonHoc.java: Lớp cấu trúc, định nghĩa một môn học (Mã môn, Tên môn, Số tín chỉ).
+---
 
-2. Diem.java: Lớp cấu trúc, liên kết một đối tượng MonHoc với diemSo (điểm số) của sinh viên.
+## Cấu trúc dự án
 
-3. SinhVien.java: Lớp dữ liệu chính. Chứa thông tin cá nhân (Mã SV, Tên) và một mảng Diem[] (gồm 4 môn). Lớp này cũng chứa logic tính tinhDiemTrungBinh() và getXepLoai().
-
-4. Node.java: Lớp triển khai "nút" (mắt xích) của danh sách liên kết kép. Mỗi Node chứa một đối tượng SinhVien và hai con trỏ prev, next.
-
-5. QuanLySinhVien.java: Lớp logic cốt lõi. Triển khai cấu trúc danh sách liên kết kép (quản lý head, tail) và tất cả các thuật toán nghiệp vụ (Thêm, Sắp xếp 18.2, 18.3, Tìm Max/Min 18.4, Lọc 18.5) và logic Đọc/Ghi file.
-
-6. Main.java: Lớp thực thi (entry-point) chứa hàm main(). Lớp này chịu trách nhiệm hiển thị menu, nhận input từ người dùng, và định nghĩa 4 đối tượng MonHoc cố định.
-
-7. diem_sinhvien_dt18.txt: File dữ liệu văn bản dùng để lưu trữ và tải danh sách sinh viên.
-
-Định dạng File Dữ liệu
-
-* Tên file: diem_sinhvien_dt18.txt
-
-* Định dạng: CSV (Các giá trị ngăn cách bởi dấu phẩy).
-
-* Cấu trúc: MaSV,HoTen,DiemToan,DiemLy,DiemAnh,DiemCTDL
-
-* Lưu ý quan trọng: Thứ tự của 4 cột điểm trong file .txt phải khớp chính xác với thứ tự của mảng CAC_MON_HOC được định nghĩa trong file Main.java.
-
-Ví dụ:
-K15.101,Nguyen Van An,8.5,7.0,6.5,9.0
-K15.102,Tran Thi Binh,5.0,6.5,7.0,4.0
-textYêu cầu
-
-* Java Development Kit (JDK) phiên bản 8 trở lên.
-
-Hướng dẫn chạy chương trình
-
-Bạn có thể chạy dự án theo một trong hai cách sau:
-
-1. Chạy bằng Terminal (Khuyên dùng)
-
-Đây là cách chạy trực tiếp, không cần IDE.
-
-1. Tổ chức file: Đảm bảo cả 6 file .java (Main.java, Node.java, SinhVien.java...) và file diem_sinhvien_dt18.txt đều nằm chung trong một thư mục.
-
-2. Mở Terminal: Mở Terminal (trên macOS/Linux) hoặc Command Prompt (trên Windows) và điều hướng đến thư mục chứa các file trên.
-Ví dụ:
-cd /duong/dan/den/thu/muc/du/an
-text3. Biên dịch (Compile): Biên dịch tất cả các file Java.
-javac *.java
-text4. Thực thi (Run): Sau khi biên dịch thành công (sẽ xuất hiện các file .class), bạn chạy file Main.
-java Main
-text5. Chương trình sẽ khởi động, tải dữ liệu từ diem_sinhvien_dt18.txt và hiển thị menu.
-
-2. Chạy bằng IDE (Ví dụ: VS Code, IntelliJ, Eclipse)
-
-1. Tạo một dự án Java mới trong IDE của bạn.
-
-2. Sao chép 6 file .java và dán vào thư mục src (hoặc thư mục mã nguồn chính) của dự án.
-
-3. Quan trọng: Sao chép file diem_sinhvien_dt18.txt và dán vào thư mục gốc (root) của dự án (thư mục cha của src).
-Cấu trúc thư mục trong IDE của bạn nên trông giống như sau:
+```
 TenDuAn/
 ├── src/
 │   ├── Main.java
@@ -92,7 +48,111 @@ TenDuAn/
 │   ├── Diem.java
 │   ├── MonHoc.java
 │   └── QuanLySinhVien.java
-└── diem_sinhvien_dt18.txt  <-- Đặt file .txt ở đây
-text4. Mở file Main.java, nhấn chuột phải và chọn "Run" (hoặc "Chạy").
+└── diem_sinhvien_dt18.txt
+```
 
-Chúc mừng bạn đã hoàn thành dự án! Bạn có muốn tôi giúp tối ưu hóa bất kỳ thuật toán nào, v
+### Mô tả các tệp
+
+- **MonHoc.java:**  
+  Lớp định nghĩa thông tin môn học (Mã môn, Tên môn, Số tín chỉ).
+
+- **Diem.java:**  
+  Lớp liên kết một đối tượng `MonHoc` với điểm số của sinh viên.
+
+- **SinhVien.java:**  
+  Lớp chứa thông tin cá nhân (Mã SV, Họ tên) và mảng `Diem[]` (4 môn).  
+  Cung cấp phương thức `tinhDiemTrungBinh()` và `getXepLoai()`.
+
+- **Node.java:**  
+  Lớp nút của danh sách liên kết kép, chứa đối tượng `SinhVien` cùng hai con trỏ `prev`, `next`.
+
+- **QuanLySinhVien.java:**  
+  Lớp xử lý nghiệp vụ chính, quản lý danh sách sinh viên, các thao tác thêm, sắp xếp, tìm kiếm, lọc và đọc/ghi file.
+
+- **Main.java:**  
+  Lớp chứa hàm `main()` để chạy chương trình, hiển thị menu, nhận lệnh từ người dùng và định nghĩa 4 môn học cố định.
+
+- **diem_sinhvien_dt18.txt:**  
+  File dữ liệu văn bản để lưu danh sách sinh viên.
+
+---
+
+## Định dạng file dữ liệu
+
+**Tên file:** `diem_sinhvien_dt18.txt`  
+**Định dạng:** CSV (phân tách bằng dấu phẩy)
+
+**Cấu trúc dòng:**  
+`MaSV,HoTen,DiemToan,DiemLy,DiemAnh,DiemCTDL`
+
+**Ví dụ:**
+```
+K15.101,Nguyen Van An,8.5,7.0,6.5,9.0
+K15.102,Tran Thi Binh,5.0,6.5,7.0,4.0
+```
+
+**Lưu ý:**  
+Thứ tự các điểm phải khớp với mảng `CAC_MON_HOC` trong `Main.java`.
+
+---
+
+## Yêu cầu hệ thống
+
+- Java Development Kit (**JDK**) phiên bản **8** trở lên.
+
+---
+
+## Hướng dẫn chạy chương trình
+
+### Cách 1: Chạy bằng Terminal (khuyên dùng)
+
+1. **Tổ chức thư mục:**  
+   Đảm bảo tất cả 6 file `.java` và file `diem_sinhvien_dt18.txt` nằm đúng như cấu trúc trên.
+
+2. **Mở Terminal hoặc Command Prompt** và điều hướng đến thư mục dự án:  
+   ```
+   cd /duong/dan/den/thu/muc/TenDuAn/src
+   ```
+
+3. **Biên dịch mã nguồn:**  
+   ```
+   javac *.java
+   ```
+
+4. **Chạy chương trình:**  
+   ```
+   java Main
+   ```
+
+Chương trình sẽ tự động tải dữ liệu từ file `diem_sinhvien_dt18.txt` và hiển thị menu chính.
+
+---
+
+### Cách 2: Chạy bằng IDE (VS Code, IntelliJ IDEA, Eclipse)
+
+1. Tạo một dự án Java mới trong IDE.  
+2. Sao chép 6 file `.java` vào thư mục `src` của dự án.  
+3. Sao chép file `diem_sinhvien_dt18.txt` vào thư mục gốc (cùng cấp với `src`).  
+4. Cấu trúc thư mục trong IDE:
+
+```
+TenDuAn/
+├── src/
+│   ├── Main.java
+│   ├── Node.java
+│   ├── SinhVien.java
+│   ├── Diem.java
+│   ├── MonHoc.java
+│   └── QuanLySinhVien.java
+└── diem_sinhvien_dt18.txt
+```
+
+5. Mở `Main.java`, chọn **Run** hoặc **Chạy chương trình**.
+
+---
+
+## Ghi chú
+
+- Chương trình được thiết kế để dễ mở rộng, có thể thêm nhiều môn học hoặc thay đổi tiêu chí xếp loại.  
+- Nên đảm bảo file dữ liệu không bị sai định dạng (sai dấu phẩy, thiếu cột...).  
+- Mọi thay đổi trong danh sách sinh viên sẽ được lưu lại tự động khi thoát chương trình.
