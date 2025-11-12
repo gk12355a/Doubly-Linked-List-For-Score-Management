@@ -1,3 +1,5 @@
+package JAVA;
+
 /**
  * Lớp Diem: Cấu trúc liên kết một Môn học và Điểm số.
  * (Theo yêu cầu: "Điểm cũng là một cấu trúc...")

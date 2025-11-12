@@ -1,3 +1,5 @@
+package JAVA;
+
 /**
  * Lớp Node: Đại diện cho một nút (sinh viên) trong danh sách liên kết kép.
  */

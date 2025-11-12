@@ -1,3 +1,5 @@
+package JAVA;
+
 /**
  * Lớp MonHoc: Lưu thông tin về một môn học.
  * (Theo yêu cầu: "môn học cũng là một cấu trúc gồm tên môn, số tín chỉ")

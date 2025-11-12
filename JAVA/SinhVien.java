@@ -1,3 +1,5 @@
+package JAVA;
+
 /**
  * Lớp SinhVien: Quản lý thông tin cá nhân và danh sách điểm của sinh viên.
  * (Theo yêu cầu: "Mỗi node quản lý thông tin cá nhân, các môn học...")

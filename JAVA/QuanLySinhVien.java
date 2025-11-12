@@ -1,3 +1,5 @@
+package JAVA;
+
 // Thêm các thư viện java.io
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
