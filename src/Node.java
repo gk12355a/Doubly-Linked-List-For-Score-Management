@@ -1,7 +1,5 @@
-package src;
-
 /**
- * Lớp Node: Đại diện cho một nút (mắt xích) trong danh sách liên kết kép.
+ * Lớp Node: Đại diện cho một nút (sinh viên) trong danh sách liên kết kép.
  */
 public class Node {
     // Dữ liệu mà Node này nắm giữ (chính là thông tin sinh viên)
@@ -16,8 +14,8 @@ public class Node {
     // Constructor
     public Node(SinhVien data) {
         this.data = data;
-        this.prev = null; // Khi mới tạo, chưa liên kết
-        this.next = null; // Khi mới tạo, chưa liên kết
+        this.prev = null;
+        this.next = null;
     }
 
     // Các phương thức getter và setter

@@ -1,127 +1,129 @@
-package src;
 import java.util.Scanner;
 
 /**
- * Lớp Main: Chứa menu và logic chính để chạy ứng dụng quản lý điểm.
+ * Lớp Main: Chứa menu và logic chính để chạy ứng dụng (Đề tài 18).
  */
 public class Main {
     
-    // Định nghĩa tên file ở đây để dễ dàng thay đổi
-    private static final String TEN_FILE = "sinhvien.txt";
+    // --- ĐỊNH NGHĨA CÁC MÔN HỌC (Cố định) ---
+    // (Mã môn, Tên môn, Số tín chỉ)
+    public static final MonHoc MON_TOAN = new MonHoc("TOAN", "Toan", 3);
+    public static final MonHoc MON_LY = new MonHoc("LY", "Vat Ly", 3);
+    public static final MonHoc MON_ANH = new MonHoc("ANH", "Tieng Anh", 2);
+    public static final MonHoc MON_CTDL = new MonHoc("CTDL", "CTDL & GT", 3);
+    
+    // Mảng chứa các môn học để dễ dàng lặp khi nhập điểm
+    public static final MonHoc[] CAC_MON_HOC = {MON_TOAN, MON_LY, MON_ANH, MON_CTDL};
+    //------------------------------------------
+
 
     public static void main(String[] args) {
-        // Tạo một đối tượng Scanner để đọc dữ liệu từ bàn phím
         Scanner scanner = new Scanner(System.in);
-        
-        // Tạo đối tượng quản lý (chính là danh sách liên kết kép)
-        QuanLyDiem qld = new QuanLyDiem();
-        
-        // --- BƯỚC 1: TẢI DỮ LIỆU KHI KHỞI ĐỘNG ---
-        qld.taiDanhSachTuFile(TEN_FILE);
-        //-----------------------------------------
-
-        int luaChon; // Biến lưu lựa chọn của người dùng
+        QuanLySinhVien qlsv = new QuanLySinhVien();
+        int luaChon;
 
         do {
-            // Hiển thị menu
-            System.out.println("\n--- MENU QUAN LY DIEM SINH VIEN (DS LIEN KET KEP) ---");
-            System.out.println("1. Them sinh vien vao cuoi danh sach");
-            System.out.println("2. Hien thi danh sach (duyet xuoi)");
-            System.out.println("3. Hien thi danh sach (duyet nguoc)");
-            System.out.println("4. Tim kiem va hien thi thong tin sinh vien (theo Ma SV)");
-            System.out.println("5. Sua diem sinh vien (theo Ma SV)");
-            System.out.println("6. Xoa sinh vien (theo Ma SV)");
-            System.out.println("0. Thoat chuong trinh (Va luu du lieu)");
+            System.out.println("\n--- MENU QUAN LY DIEM (DE TAI 18) ---");
+            System.out.println("1. Nhap danh sach sinh vien (cho den khi nhap $)");
+            System.out.println("2. Hien thi danh sach sinh vien");
+            System.out.println("3. Sap xep danh sach TANG DAN theo diem TOAN");
+            System.out.println("4. Sap xep danh sach TANG DAN theo DIEM TRUNG BINH");
+            System.out.println("5. Tim sinh vien co DTB Max / Min");
+            System.out.println("6. Xuat danh sach sinh vien theo xep loai (A, B, C, D, F)");
+            System.out.println("0. Thoat chuong trinh");
             System.out.print("Moi ban chon chuc nang: ");
 
-            // Đọc lựa chọn (sử dụng try-catch để tránh lỗi nhập sai kiểu)
             try {
                 luaChon = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                luaChon = -1; // Gán một giá trị không hợp lệ để chạy default case
+                luaChon = -1;
             }
 
-            // Xử lý lựa chọn
             switch (luaChon) {
                 case 1:
-                    // 1. Thêm sinh viên
-                    System.out.print("Nhap Ma SV: ");
-                    String maSV = scanner.nextLine();
-                    System.out.print("Nhap Ho ten: ");
-                    String hoTen = scanner.nextLine();
-                    double diem = -1;
-                    // Vòng lặp yêu cầu nhập lại nếu điểm không hợp lệ
-                    while (diem < 0 || diem > 10) {
-                        try {
-                            System.out.print("Nhap Diem (0-10): ");
-                            diem = Double.parseDouble(scanner.nextLine());
-                            if(diem < 0 || diem > 10) System.out.println("Diem phai trong khoang 0-10. Vui long nhap lai.");
-                        } catch (NumberFormatException e) {
-                            System.out.println("Vui long nhap mot so. Vui long nhap lai.");
-                            diem = -1; // Đặt lại giá trị để lặp tiếp
-                        }
-                    }
-                    // Tạo đối tượng SinhVien và thêm vào danh sách
-                    SinhVien svMoi = new SinhVien(maSV, hoTen, diem);
-                    qld.themSinhVien(svMoi);
+                    // 18.1. Nhập 1 danh sách cho đến khi nhập dấu “$” vào tên
+                    nhapDanhSach(scanner, qlsv);
                     break;
                 case 2:
-                    // 2. Hiển thị danh sách (xuôi)
-                    qld.hienThiDanhSach();
+                    qlsv.hienThiDanhSach();
                     break;
                 case 3:
-                    // 3. Hiển thị danh sách (ngược)
-                    qld.hienThiDanhSachNguoc();
+                    // 18.2. Sắp xếp danh sách theo chiều tăng dần của điểm toán
+                    qlsv.sapXepTheoDiemToan();
+                    qlsv.hienThiDanhSach(); // Hiển thị kết quả sau sắp xếp
                     break;
                 case 4:
-                    // 4. Tìm kiếm
-                    System.out.print("Nhap Ma SV can tim: ");
-                    maSV = scanner.nextLine();
-                    Node nodeTimThay = qld.timKiem(maSV);
-                    if (nodeTimThay != null) {
-                        System.out.println("Tim thay sinh vien:");
-                        System.out.println(nodeTimThay.getData().toString());
-                    } else {
-                        System.out.println("Khong tim thay sinh vien voi ma: " + maSV);
-                    }
+                    // 18.3. Sắp xếp danh sách theo chiều tăng dần của điểm trung bình
+                    qlsv.sapXepTheoDTB();
+                    qlsv.hienThiDanhSach(); // Hiển thị kết quả sau sắp xếp
                     break;
                 case 5:
-                    // 5. Sửa điểm
-                    System.out.print("Nhap Ma SV can sua diem: ");
-                    maSV = scanner.nextLine();
-                    double diemMoi = -1;
-                    // Vòng lặp yêu cầu nhập lại nếu điểm không hợp lệ
-                    while (diemMoi < 0 || diemMoi > 10) {
-                         try {
-                            System.out.print("Nhap Diem moi (0-10): ");
-                            diemMoi = Double.parseDouble(scanner.nextLine());
-                            if(diemMoi < 0 || diemMoi > 10) System.out.println("Diem phai trong khoang 0-10. Vui long nhap lai.");
-                        } catch (NumberFormatException e) {
-                            System.out.println("Vui long nhap mot so. Vui long nhap lai.");
-                            diemMoi = -1; // Đặt lại giá trị để lặp tiếp
-                        }
-                    }
-                    qld.suaDiem(maSV, diemMoi);
+                    // 18.4 Tìm sinh viên có điểm trung bình Max/Min
+                    qlsv.timMaxMinDTB();
                     break;
                 case 6:
-                    // 6. Xóa sinh viên
-                    System.out.print("Nhap Ma SV can xoa: ");
-                    maSV = scanner.nextLine();
-                    qld.xoaSinhVien(maSV);
+                    // 18.5. Xuất danh sách sinh viên đạt điểm A, B, C, D, F
+                    System.out.print("Nhap xep loai can xem (A, B, C, D, F): ");
+                    String xepLoai = scanner.nextLine().toUpperCase();
+                    qlsv.xuatDanhSachTheoXepLoai(xepLoai);
                     break;
                 case 0:
-                    // --- BƯỚC 2: LƯU DỮ LIỆU KHI THOÁT ---
-                    qld.luuDanhSachVaoFile(TEN_FILE);
-                    //---------------------------------------
-                    
-                    System.out.println("Cam on ban da su dung chuong trinh!");
+                    System.out.println("Da thoat chuong trinh.");
                     break;
                 default:
-                    System.out.println("Lua chon khong hop le. Vui long chon tu 0 den 6.");
+                    System.out.println("Lua chon khong hop le. Vui long chon lai.");
             }
 
-        } while (luaChon != 0); // Lặp lại menu nếu người dùng chưa chọn 0
+        } while (luaChon != 0);
 
-        scanner.close(); // Đóng scanner khi kết thúc
+        scanner.close();
+    }
+    
+    /**
+     * Hàm chức năng cho 18.1. Nhập danh sách
+     */
+    public static void nhapDanhSach(Scanner scanner, QuanLySinhVien qlsv) {
+        System.out.println("--- BAT DAU NHAP DANH SACH ---");
+        while (true) {
+            System.out.print("Nhap Ho ten sinh vien (nhap '$' de dung): ");
+            String hoTen = scanner.nextLine();
+            if (hoTen.equals("$")) {
+                break; // Dừng nhập khi gõ $
+            }
+
+            System.out.print("Nhap Ma SV: ");
+            String maSV = scanner.nextLine();
+
+            // Khởi tạo mảng 4 điểm cho SV
+            Diem[] danhSachDiem = new Diem[CAC_MON_HOC.length];
+
+            // Lặp qua 4 môn học CỐ ĐỊNH để nhập điểm
+            for (int i = 0; i < CAC_MON_HOC.length; i++) {
+                MonHoc mon = CAC_MON_HOC[i];
+                double diemSo = -1;
+                
+                // Vòng lặp để đảm bảo điểm nhập hợp lệ (0-10)
+                while (diemSo < 0 || diemSo > 10) {
+                    try {
+                        System.out.print("Nhap diem mon " + mon.getTenMon() + " (" + mon.getSoTinChi() + "TC): ");
+                        diemSo = Double.parseDouble(scanner.nextLine());
+                        if (diemSo < 0 || diemSo > 10) {
+                            System.out.println("Diem phai tu 0 den 10. Nhap lai.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Vui long nhap so. Nhap lai.");
+                        diemSo = -1;
+                    }
+                }
+                // Gán điểm vừa nhập vào mảng
+                danhSachDiem[i] = new Diem(mon, diemSo);
+            }
+            
+            // Tạo SV mới và thêm vào danh sách
+            SinhVien sv = new SinhVien(maSV, hoTen, danhSachDiem);
+            qlsv.themSinhVien(sv);
+            System.out.println("=> Da them sinh vien: " + hoTen);
+        }
+        System.out.println("--- KET THUC NHAP DANH SACH ---");
     }
 }
