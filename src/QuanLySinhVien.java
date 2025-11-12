@@ -1,6 +1,14 @@
+// Thêm các thư viện java.io
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
  * Lớp QuanLySinhVien: Cài đặt Danh sách liên kết kép
  * và các thuật toán theo yêu cầu đề tài.
+ * (PHIÊN BẢN NÂNG CẤP CÓ ĐỌC/GHI FILE)
  */
 public class QuanLySinhVien {
     private Node head;
@@ -14,9 +22,25 @@ public class QuanLySinhVien {
     // --- CÁC HÀM CƠ BẢN ---
     
     /**
-     * Thêm sinh viên vào cuối danh sách
+     * Thêm sinh viên vào cuối danh sách (Khi người dùng nhập)
      */
     public void themSinhVien(SinhVien sv) {
+        Node newNode = new Node(sv);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.setNext(newNode);
+            newNode.setPrev(tail);
+            tail = newNode;
+        }
+        System.out.println("=> Da them sinh vien: " + sv.getHoTen());
+    }
+
+    /**
+     * Hàm nội bộ: Thêm SV khi tải file mà không in ra thông báo
+     */
+    private void themSinhVienKhiTaiFile(SinhVien sv) {
         Node newNode = new Node(sv);
         if (head == null) {
             head = newNode;
@@ -48,26 +72,24 @@ public class QuanLySinhVien {
     }
 
     // --- CÁC HÀM NGHIỆP VỤ (ĐỀ TÀI 18) ---
+    // (Giữ nguyên toàn bộ các hàm: sapXepTheoDiemToan, sapXepTheoDTB, 
+    // timMaxMinDTB, xuatDanhSachTheoXepLoai)
 
     /**
      * 18.2. Sắp xếp danh sách theo chiều tăng dần của điểm toán.
-     * (Sử dụng Bubble Sort, hoán đổi DỮ LIỆU, không hoán đổi Node)
      */
     public void sapXepTheoDiemToan() {
-        if (head == null || head.getNext() == null) return; // DS rỗng hoặc có 1 SV
+        if (head == null || head.getNext() == null) return; 
 
         boolean daSapXep;
         do {
             daSapXep = false;
             Node hienTai = head;
             while (hienTai.getNext() != null) {
-                // Lấy điểm Toán (mã "TOAN") của 2 node liền kề
                 double diem1 = hienTai.getData().getDiemMon("TOAN");
                 double diem2 = hienTai.getNext().getData().getDiemMon("TOAN");
 
-                // Nếu điểm 1 > điểm 2 (sắp xếp tăng dần) thì hoán đổi
                 if (diem1 > diem2) {
-                    // Hoán đổi data (đối tượng SinhVien) giữa 2 node
                     SinhVien temp = hienTai.getData();
                     hienTai.setData(hienTai.getNext().getData());
                     hienTai.getNext().setData(temp);
@@ -75,14 +97,13 @@ public class QuanLySinhVien {
                 }
                 hienTai = hienTai.getNext();
             }
-        } while (daSapXep); // Lặp lại nếu vẫn còn hoán đổi
+        } while (daSapXep);
         
         System.out.println("Da sap xep tang dan theo diem Toan.");
     }
 
     /**
      * 18.3. Sắp xếp danh sách theo chiều tăng dần của điểm trung bình.
-     * (Sử dụng Bubble Sort, hoán đổi DỮ LIỆU)
      */
     public void sapXepTheoDTB() {
         if (head == null || head.getNext() == null) return;
@@ -95,7 +116,6 @@ public class QuanLySinhVien {
                 double dtb1 = hienTai.getData().tinhDiemTrungBinh();
                 double dtb2 = hienTai.getNext().getData().tinhDiemTrungBinh();
 
-                // Sắp xếp tăng dần
                 if (dtb1 > dtb2) {
                     SinhVien temp = hienTai.getData();
                     hienTai.setData(hienTai.getNext().getData());
@@ -127,13 +147,11 @@ public class QuanLySinhVien {
         while (hienTai != null) {
             double dtbHienTai = hienTai.getData().tinhDiemTrungBinh();
             
-            // Tìm Max
             if (dtbHienTai > dtbMax) {
                 dtbMax = dtbHienTai;
                 nodeMax = hienTai;
             }
             
-            // Tìm Min
             if (dtbHienTai < dtbMin) {
                 dtbMin = dtbHienTai;
                 nodeMin = hienTai;
@@ -177,5 +195,84 @@ public class QuanLySinhVien {
             System.out.println("Khong tim thay sinh vien nao dat xep loai " + xepLoai);
         }
         System.out.println("------------------------------------");
+    }
+
+    // --- CÁC HÀM ĐỌC/GHI FILE (NÂNG CẤP) ---
+
+    /**
+     * Tải danh sách sinh viên từ file
+     * @param tenFile Tên file (ví dụ: "data.txt")
+     * @param cacMonHoc Mảng các môn học (lấy từ Main) để tạo đối tượng Diem
+     */
+    public void taiDanhSachTuFile(String tenFile, MonHoc[] cacMonHoc) {
+        try (BufferedReader br = new BufferedReader(new FileReader(tenFile))) {
+            String line;
+            System.out.println("Dang tai du lieu tu file " + tenFile + "...");
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",");
+                
+                // Định dạng: MaSV,HoTen,DiemToan,DiemLy,DiemAnh,DiemCTDL (6 phần)
+                if (parts.length == 6) { 
+                    try {
+                        String maSV = parts[0].trim();
+                        String hoTen = parts[1].trim();
+                        
+                        // Tạo mảng 4 điểm
+                        Diem[] danhSachDiem = new Diem[cacMonHoc.length];
+                        
+                        // Đọc 4 điểm (parts[2] đến parts[5])
+                        for (int i = 0; i < cacMonHoc.length; i++) {
+                            // i=0 -> parts[2] (Toán)
+                            // i=1 -> parts[3] (Lý)
+                            // i=2 -> parts[4] (Anh)
+                            // i=3 -> parts[5] (CTDL)
+                            double diemSo = Double.parseDouble(parts[i + 2].trim());
+                            danhSachDiem[i] = new Diem(cacMonHoc[i], diemSo);
+                        }
+                        
+                        SinhVien sv = new SinhVien(maSV, hoTen, danhSachDiem);
+                        this.themSinhVienKhiTaiFile(sv); // Thêm "im lặng"
+                        
+                    } catch (NumberFormatException e) {
+                        System.out.println("Loi dinh dang so trong file: " + line);
+                    }
+                }
+            }
+            System.out.println("Tai du lieu thanh cong!");
+        } catch (IOException e) {
+            System.out.println("Loi khi doc file (file co the chua ton tai): " + e.getMessage());
+        }
+    }
+
+    /**
+     * Lưu danh sách sinh viên hiện tại vào file
+     */
+    public void luuDanhSachVaoFile(String tenFile) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(tenFile))) {
+            System.out.println("Dang luu du lieu vao file " + tenFile + "...");
+            Node hienTai = head;
+            while (hienTai != null) {
+                SinhVien sv = hienTai.getData();
+                
+                // Chuẩn bị chuỗi dữ liệu
+                // MaSV,HoTen,
+                String line = sv.getMaSV() + "," + sv.getHoTen();
+                
+                // Nối 4 điểm vào chuỗi
+                // LƯU Ý: Phải đảm bảo thứ tự điểm khi lưu
+                line += "," + sv.getDiemMon("TOAN");
+                line += "," + sv.getDiemMon("LY");
+                line += "," + sv.getDiemMon("ANH");
+                line += "," + sv.getDiemMon("CTDL");
+                
+                bw.write(line);
+                bw.newLine();
+                
+                hienTai = hienTai.getNext();
+            }
+            System.out.println("Luu du lieu thanh cong!");
+        } catch (IOException e) {
+            System.out.println("Loi khi ghi file: " + e.getMessage());
+        }
     }
 }
